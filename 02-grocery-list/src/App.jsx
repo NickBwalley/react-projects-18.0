@@ -40,7 +40,10 @@ function App() {
       <li key={item.name}>
         <div className="container">
           <input type="checkbox" />
-          <p>{item.name}</p>
+          <p>
+            {item.name}{" "}
+            {item.quantity > 1 ? <span>x{item.quantity}</span> : null}
+          </p>
         </div>
         <div>
           <button className="remove-button">X</button>
