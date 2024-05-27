@@ -7,6 +7,10 @@ function App() {
     amount: "",
     statementType: "",
   });
+  const [showErrors, setShowErrors] = useState({
+    statement: false,
+    amount: false,
+  });
 
   const handleUpdateInput = (e) => {
     setInput({
@@ -15,6 +19,26 @@ function App() {
     });
   };
 
+  const handleAddNewStatement = () => {
+    const { statement, amount } = input;
+
+    if (!statement) {
+      return setShowErrors({
+        statement: true,
+        amount: false,
+      });
+    } else if (!amount) {
+      return setShowErrors({
+        statement: false,
+        amount: true,
+      });
+    } else {
+      setShowErrors({
+        statement: false,
+        amount: false,
+      });
+    }
+  };
   return (
     <main>
       <div>
@@ -26,6 +50,9 @@ function App() {
             onChange={handleUpdateInput}
             value={input.statement}
             name="statement"
+            style={
+              showErrors.statement ? { borderColor: "rgb(206, 76, 76)" } : null
+            }
           />
           <input
             type="number"
@@ -33,6 +60,9 @@ function App() {
             onChange={handleUpdateInput}
             value={input.amount}
             name="amount"
+            style={
+              showErrors.amount ? { borderColor: "rgb(206, 76, 76)" } : null
+            }
           />
           <select
             onChange={handleUpdateInput}
@@ -42,7 +72,7 @@ function App() {
             <option value="income">Income</option>
             <option value="expense">Expense</option>
           </select>
-          <button>+</button>
+          <button onClick={handleAddNewStatement}>+</button>
         </div>
         <div>
           <div className="card">
