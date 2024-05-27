@@ -2,14 +2,14 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
+  const [statements, setStatements] = useState([]);
   const [input, setInput] = useState({
     statement: "",
     amount: "",
-    statementType: "",
+    statementType: "income",
   });
-  const [showErrors, setShowErrors] = useState({
+  const [showError, setShowError] = useState({
     statement: false,
-    amount: false,
   });
 
   const handleUpdateInput = (e) => {
@@ -20,29 +20,44 @@ function App() {
   };
 
   const handleAddNewStatement = () => {
-    const { statement, amount } = input;
+    const { statement, amount, statementType } = input;
 
     if (!statement) {
-      return setShowErrors({
+      return setShowError({
         statement: true,
         amount: false,
       });
     } else if (!amount) {
-      return setShowErrors({
+      return setShowError({
         statement: false,
         amount: true,
       });
     } else {
-      setShowErrors({
+      setShowError({
         statement: false,
         amount: false,
+      });
+      // ADD LOGIC TO ADD STATMENT
+      setStatements([
+        ...statements,
+        {
+          name: statement,
+          amount: parseFloat(amount).toFixed(2),
+          type: statementType,
+          date: new Date().toDateString(),
+        },
+      ]);
+      setInput({
+        statement: "",
+        amount: "",
+        statementType: "income",
       });
     }
   };
   return (
     <main>
       <div>
-        <h1 className="total-text success">0</h1>
+        <h1 className="total-text ">0</h1>
         <div className="input-container">
           <input
             type="text"
@@ -51,7 +66,7 @@ function App() {
             value={input.statement}
             name="statement"
             style={
-              showErrors.statement ? { borderColor: "rgb(206, 76, 76)" } : null
+              showError.statement ? { borderColor: "rgb(206, 76, 76)" } : null
             }
           />
           <input
@@ -61,7 +76,7 @@ function App() {
             value={input.amount}
             name="amount"
             style={
-              showErrors.amount ? { borderColor: "rgb(206, 76, 76)" } : null
+              showError.amount ? { borderColor: "rgb(206, 76, 76)" } : null
             }
           />
           <select
@@ -75,13 +90,21 @@ function App() {
           <button onClick={handleAddNewStatement}>+</button>
         </div>
         <div>
-          <div className="card">
-            <div className="card-info">
-              <h4>Salary</h4>
-              <p>July 27th, 2024</p>
+          {statements.map(({ name, type, amount, date }) => (
+            <div className="card">
+              <div className="card-info">
+                <h4>{name}</h4>
+                <p>{date}</p>
+              </div>
+              <p
+                className={`amount-text ${
+                  type === "income" ? "success" : "danger"
+                }`}
+              >
+                {type === "income" ? "+" : "-"}${amount}
+              </p>
             </div>
-            <p className="amount-text success">+$5000</p>
-          </div>
+          ))}
         </div>
       </div>
     </main>
