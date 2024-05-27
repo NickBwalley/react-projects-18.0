@@ -25,12 +25,25 @@ function App() {
       }
     }
   };
+
+  const renderGroceryList = () => {
+    return groceryItems.map((item) => (
+      <li>
+        <div className="container">
+          <input type="checkbox" />
+          <p>{item.name}</p>
+        </div>
+        <div>
+          <button className="remove-button">X</button>
+        </div>
+      </li>
+    ));
+  };
   return (
     <main className="App">
       <div>
         <div>
           <h4 className="success">You're done</h4>
-          {JSON.stringify(groceryItems)}
           <div className="header">
             <h1>Shopping List</h1>
             <img src={groceryCartImg} alt="" />
@@ -44,17 +57,7 @@ function App() {
             />
           </div>
         </div>
-        <ul>
-          <li>
-            <div className="container">
-              <input type="checkbox" />
-              <p>Carrots</p>
-            </div>
-            <div>
-              <button className="remove-button">X</button>
-            </div>
-          </li>
-        </ul>
+        <ul>{renderGroceryList()}</ul>
       </div>
     </main>
   );
